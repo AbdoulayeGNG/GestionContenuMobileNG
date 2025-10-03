@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:gestioncontenu/data/models/content/content_model.dart';
 
 class ContentRemoteDataSource {
+  
   final Dio _dio;
 
   ContentRemoteDataSource(this._dio);

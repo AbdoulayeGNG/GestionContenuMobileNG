@@ -6,6 +6,7 @@ class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
   static const routeName = '/signup';
 
+
   @override
   State<SignupPage> createState() => _SignupPageState();
 }
@@ -17,6 +18,9 @@ class _SignupPageState extends State<SignupPage> {
   final _emailCtrl = TextEditingController();
   final _pwdCtrl = TextEditingController();
   bool _obscure = true;
+
+
+
 
   @override
   void dispose() {

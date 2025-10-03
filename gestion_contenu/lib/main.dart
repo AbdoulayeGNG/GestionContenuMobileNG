@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestioncontenu/presentation/pages/app_start.dart';
 import 'package:gestioncontenu/presentation/pages/content_detail_page.dart';
 import 'package:gestioncontenu/presentation/pages/home_editor_page.dart';
@@ -14,7 +15,9 @@ import 'package:gestioncontenu/services/token_storage.dart';
 import 'package:gestioncontenu/theme.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ProviderScope(
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
