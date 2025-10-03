@@ -1,6 +1,5 @@
 import 'package:gestioncontenu/data/datasources/content_remote_data_source.dart';
 import 'package:gestioncontenu/data/mapper/content_mapper.dart';
-import 'package:gestioncontenu/data/models/content/content_model.dart';
 import 'package:gestioncontenu/domains/entities/content.dart';
 import 'package:gestioncontenu/domains/repositories/content_repository.dart';
 

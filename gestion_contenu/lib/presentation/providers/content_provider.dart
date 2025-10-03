@@ -13,7 +13,7 @@ final contentRepositoryProvider = Provider((ref){
   return ContentRepositoryImpl(contentRemoteDataSource:repository);
 });
 
-final allContent = Provider((ref){
+final allContentProvider = FutureProvider((ref){
   final repo = ref.watch(contentRepositoryProvider);
   return repo.getContents();
 });

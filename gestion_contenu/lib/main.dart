@@ -24,10 +24,10 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    final storage = TokenStorage();
-    final api = ApiClient(storage);
-    final authService = AuthService(api);
-    final contentService = ContentService(api);
+    // final storage = TokenStorage();
+    // final api = ApiClient(storage);
+    // final authService = AuthService(api);
+    // final contentService = ContentService(api);
 
     return MaterialApp(
       title: 'Mini CMS',
@@ -35,15 +35,16 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const AppStart(),
-        LoginPage.routeName: (context) => const LoginPage(),
-        SignupPage.routeName: (context) => const SignupPage(),
-        HomeViewerPage.routeName: (context) => const HomeViewerPage(),
-        HomeEditorPage.routeName: (context) => const HomeEditorPage(),
-        ContentDetailPage.routeName: (context) => const ContentDetailPage(),
-      },
+      home: HomeEditorPage(),
+      // initialRoute: '/',
+      // routes: {
+      //   '/': (context) => const AppStart(),
+      //   LoginPage.routeName: (context) => const LoginPage(),
+      //   SignupPage.routeName: (context) => const SignupPage(),
+      //   HomeViewerPage.routeName: (context) => const HomeViewerPage(),
+      //   HomeEditorPage.routeName: (context) => const HomeEditorPage(),
+      //   ContentDetailPage.routeName: (context) => const ContentDetailPage(),
+      // },
     );
   }
 }
