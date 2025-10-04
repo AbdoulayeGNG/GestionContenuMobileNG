@@ -60,6 +60,15 @@ class _HomeViewerPageState extends State<HomeViewerPage> {
                 decoration: const InputDecoration(labelText: 'Catégorie'),
                 onSubmitted: (v) => content.setCategoryFilter(v.trim()),
               ),
+              
+            ),
+            Expanded(
+              child: TextField(
+                controller: _categoryCtrl,
+                decoration: const InputDecoration(labelText: 'Catégorie'),
+                onSubmitted: (v) => content.setCategoryFilter(v.trim()),
+              ),
+              
             ),
             const SizedBox(width: 12),
             Expanded(
