@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:gestioncontenu/core/constants.dart';
 import 'package:gestioncontenu/domains/entities/content.dart';
 
-class ContentCard extends StatelessWidget {
-  const ContentCard({super.key, required this.content});
+class ContentCard extends StatefulWidget {
+  const ContentCard({super.key, required this.content, required this.edit});
 
   final Content content;
+  final void Function() edit;
 
+  @override
+  State<ContentCard> createState() => _ContentCardState();
+}
+
+class _ContentCardState extends State<ContentCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -48,7 +54,7 @@ class ContentCard extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        format.format(content.createdAt!),
+                        format.format(widget.content.createdAt!),
                         style: TextStyle(color: Colors.white, fontSize: 17),
                       ),
                     ],
@@ -56,13 +62,13 @@ class ContentCard extends StatelessWidget {
                   Row(
                     children: [
                       IconButton(
-                          onPressed: () {},
+                          onPressed: widget.edit,
                           icon: Icon(
                             Icons.edit,
                             color: const Color.fromARGB(179, 33, 149, 243),
                           )),
                       IconButton(
-                          onPressed: () {},
+                          onPressed: _showConfirmationDialog,
                           icon: Icon(
                             Icons.delete,
                             color: Colors.red,
@@ -77,7 +83,7 @@ class ContentCard extends StatelessWidget {
               left: 5,
               right: 5,
               child: Text(
-                content.title,
+                widget.content.title,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 25),
               ),
@@ -86,5 +92,48 @@ class ContentCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _delete(int id) {
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        "Contenu Supprimer avec succes, {id: $id}",
+        style: TextStyle(fontSize: 18),
+      ),
+      backgroundColor: Colors.green[800],
+    ));
+  }
+
+  void _showConfirmationDialog() {
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: Text("voulez vous supprimer ce contenu"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    _delete(widget.content.id);
+                  },
+                  style:
+                      TextButton.styleFrom(backgroundColor: Colors.green[800]),
+                  child: Text(
+                    'OUI',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  )),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: TextButton.styleFrom(backgroundColor: Colors.red),
+                  child: Text(
+                    'NON',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  )),
+            ],
+          );
+        });
   }
 }
