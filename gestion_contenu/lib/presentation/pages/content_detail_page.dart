@@ -1,39 +1,87 @@
 import 'package:flutter/material.dart';
-import 'package:gestioncontenu/models/content.dart';
 
-class ContentDetailPage extends StatelessWidget {
-  const ContentDetailPage({super.key});
-  static const routeName = '/detail';
+class DetailScreen extends StatelessWidget {
+  final String title;
+  final String imageUrl;
+  final String description;
+  final String date;
+
+  const DetailScreen({
+    Key? key,
+    required this.title,
+    required this.imageUrl,
+    required this.description,
+    required this.date,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final ContentItem item = ModalRoute.of(context)!.settings.arguments as ContentItem;
     return Scaffold(
-      appBar: AppBar(title: Text(item.title)),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          if (item.image.isNotEmpty)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(item.image, fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const SizedBox(height: 160, child: Center(child: Icon(Icons.broken_image)))),
-            ),
-          const SizedBox(height: 16),
-          Text(item.title, style: Theme.of(context).textTheme.headlineSmall),
-          const SizedBox(height: 8),
-          Row(children: [
-            Icon(Icons.person, color: Colors.grey.shade700),
-            const SizedBox(width: 6),
-            Expanded(child: Text('Auteur: ${item.authorId}', overflow: TextOverflow.ellipsis)),
-          ]),
-          const SizedBox(height: 8),
-          Text('Catégorie: ${item.category}'),
-          const SizedBox(height: 8),
-          Wrap(spacing: 6, children: item.tags.map((t) => Chip(label: Text(t))).toList()),
-          const SizedBox(height: 16),
-          Text(item.description),
-        ]),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.more_vert, color: Colors.black),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                date,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.green,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              // Titre
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Image
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  imageUrl,
+                  width: double.infinity,
+                  height: 220,
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Description
+              Text(
+                description,
+                style: const TextStyle(
+                  fontSize: 16,
+                  height: 1.5,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
