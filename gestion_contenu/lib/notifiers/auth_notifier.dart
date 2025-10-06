@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestioncontenu/services/auth_service.dart';
 import 'package:gestioncontenu/services/token_storage.dart';
 import 'package:gestioncontenu/models/user.dart';
-import 'package:gestioncontenu/presentation/providers/services_providers.dart';
 
+// État de l'authentification
 class AuthState {
   final AppUser? user;
   final String? token;
@@ -32,6 +32,7 @@ class AuthState {
   }
 }
 
+// Notifier qui gère l'état d'authentification
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthService _authService;
   final TokenStorage _storage;
@@ -88,9 +89,3 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = AuthState();
   }
 }
-
-final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  final authService = ref.watch(authServiceProvider);
-  final tokenStorage = ref.watch(tokenStorageProvider);
-  return AuthNotifier(authService, tokenStorage);
-});

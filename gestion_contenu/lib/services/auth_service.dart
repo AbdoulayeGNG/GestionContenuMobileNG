@@ -7,10 +7,13 @@ class AuthService {
   AuthService(this._client);
 
   Future<(String token, AppUser user)> login({required String email, required String password}) async {
-    final Response res = await _client.dio.post('/auth/login', data: {
+    print(email+','+password);
+    print(_client.dio.options.baseUrl);
+    final Response res = await _client.dio.post('/login', data: {
       'email': email,
       'password': password,
     });
+    print(res);
     final data = res.data as Map<String, dynamic>;
     final token = data['token']?.toString() ?? '';
     final user = AppUser.fromJson(data['user'] as Map<String, dynamic>);
@@ -23,7 +26,7 @@ class AuthService {
     required String email,
     required String password,
   }) async {
-    await _client.dio.post('/auth/signup', data: {
+    await _client.dio.post('/api/auth/sign-up', data: {
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
@@ -31,3 +34,4 @@ class AuthService {
     });
   }
 }
+
