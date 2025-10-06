@@ -68,11 +68,12 @@ class _ContentCardState extends State<ContentCard> {
                             color: const Color.fromARGB(179, 33, 149, 243),
                           )),
                       IconButton(
-                          onPressed: _showConfirmationDialog,
-                          icon: Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          )),
+                        onPressed: _showConfirmationDialog,
+                        icon: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                      ),
                     ],
                   )
                 ],
