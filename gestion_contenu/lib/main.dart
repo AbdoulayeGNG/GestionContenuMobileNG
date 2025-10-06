@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestioncontenu/presentation/pages/app_start.dart';
 import 'package:gestioncontenu/presentation/pages/content_detail_page.dart';
 import 'package:gestioncontenu/presentation/pages/home_editor_page.dart';
-import 'package:gestioncontenu/presentation/pages/home_viewer_page.dart';
 import 'package:gestioncontenu/presentation/pages/login_page.dart';
 import 'package:gestioncontenu/presentation/pages/signup_page.dart';
 import 'package:gestioncontenu/providers/auth_provider.dart';
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mini CMS',
       debugShowCheckedModeBanner: false,
-      theme: lightTheme,
+      theme: ThemeData(useMaterial3: true),
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
       home: HomeEditorPage(),
