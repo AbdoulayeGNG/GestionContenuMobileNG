@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class SearchField extends StatefulWidget {
-  const SearchField({super.key, 
+  const SearchField({
+    super.key,
     this.debounceDelay = const Duration(milliseconds: 500),
     this.hintText = 'Rechercher un contenu...',
   });
@@ -22,7 +23,7 @@ class _SearchFieldState extends State<SearchField> {
   // void _onSearchChanged(String value) {
   //   // Annuler le timer précédent
   //   _debounceTimer?.cancel();
-    
+
   //   // Démarrer un nouveau timer
   //   _debounceTimer = Timer(widget.debounceDelay, () {
   //     widget.onSearch(value);
@@ -51,7 +52,7 @@ class _SearchFieldState extends State<SearchField> {
           borderSide: const BorderSide(color: Colors.blue, width: 2),
         ),
         filled: true,
-        fillColor: Colors.grey[100],
+        fillColor: Colors.grey[300],
         contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
       ),
       onChanged: (value) {},

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gestioncontenu/core/theme/app_theme.dart';
 import 'package:gestioncontenu/presentation/pages/app_start.dart';
 import 'package:gestioncontenu/presentation/pages/content_detail_page.dart';
 import 'package:gestioncontenu/presentation/pages/home_editor_page.dart';
 import 'package:gestioncontenu/presentation/pages/login_page.dart';
 import 'package:gestioncontenu/presentation/pages/signup_page.dart';
+import 'package:gestioncontenu/presentation/providers/theme_provider.dart';
 import 'package:gestioncontenu/providers/auth_provider.dart';
 import 'package:gestioncontenu/providers/content_provider.dart';
 import 'package:gestioncontenu/services/api_client.dart';
@@ -19,10 +21,11 @@ void main() {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = ref.watch(themeProvider);
     // final storage = TokenStorage();
     // final api = ApiClient(storage);
     // final authService = AuthService(api);
@@ -31,9 +34,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mini CMS',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true),
-      darkTheme: darkTheme,
-      themeMode: ThemeMode.system,
+      theme: AppTheme.buildLightTheme(),
+      darkTheme: AppTheme.buildDarkTheme(),
+      themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
       home: HomeEditorPage(),
       // initialRoute: '/',
       // routes: {

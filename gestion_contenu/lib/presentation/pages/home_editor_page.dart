@@ -11,6 +11,7 @@ import 'package:gestioncontenu/data/mocked_data.dart';
 import 'package:gestioncontenu/domains/entities/content.dart';
 import 'package:gestioncontenu/models/content.dart';
 import 'package:gestioncontenu/presentation/providers/content_provider.dart';
+import 'package:gestioncontenu/presentation/providers/theme_provider.dart';
 import 'package:gestioncontenu/presentation/widgets/content_card.dart';
 import 'package:gestioncontenu/providers/auth_provider.dart';
 import 'package:gestioncontenu/providers/content_provider.dart';
@@ -34,6 +35,7 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Gestiion du theme
     final contentAsync = ref.watch(allContentProvider);
     final fakeAsync = AsyncData(contents_data);
 
@@ -49,27 +51,66 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
     );
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      // backgroundColor: Colors.grey[50],
       appBar: _buildAppBar(),
-      body: contents,
+      drawer: _buildDrawer(),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
+            child: SearchField(),
+          ),
+          Expanded(child: contents)
+        ],
+      ),
       floatingActionButton: _buildFloatingActionButton(),
     );
   }
 
   AppBar _buildAppBar() {
     return AppBar(
-      title: const Text(
+      title: Text(
         'Mes Publications',
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: Colors.black87,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
       ),
-      backgroundColor: Colors.white,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Icon(
+            Icons.logout,
+            color: Colors.black,
+            weight: 2,
+          ),
+        )
+      ],
       elevation: 1,
       shadowColor: Colors.black12,
       iconTheme: const IconThemeData(color: Colors.black87),
-      centerTitle: true,
+    );
+  }
+
+  Drawer _buildDrawer() {
+    return Drawer(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width / 1.5,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
+          child: Column(
+            children: [
+              SwitchListTile(
+                value: true,
+                onChanged: (value) {
+                  ref.read(themeProvider.notifier).switchToTheme();
+                },
+                title: Text('Mode sombre', style: TextStyle(fontSize: 20)),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -226,6 +267,11 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
   void _showBottomSheet({Content? contentToEdit}) {
     _isEditing = contentToEdit != null;
     _editingContent = contentToEdit;
+    // Renitialiser l'image
+    if (!_isEditing) {
+      _image = null;
+      _imagePath = "";
+    }
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -243,7 +289,9 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
           child: _buildBottomSheetContent(),
         );
       },
-    );
+    ).then((_) {
+      _resetForm();
+    });
   }
 
   Widget _buildBottomSheetContent() {
@@ -334,9 +382,28 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
   }
 
   Widget _handleImage() {
-    Widget view = SizedBox();
-    if (_imagePath.isEmpty && !_isEditing) {
-      view = Column(
+    if (_image != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Image.file(
+          File(_image!.path),
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+        ),
+      );
+    } else if (_isEditing && _editingContent?.image != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Image.asset(
+          'assets/img/ile_de_kassa.jpg', // Remplacez par votre asset
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+        ),
+      );
+    } else {
+      return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
@@ -354,27 +421,7 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
           ),
         ],
       );
-    } else {
-      view = ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: !_isEditing
-            ? Image.file(
-                File(_imagePath),
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-              )
-            : Image.asset(
-                'assets/img/ile_de_kassa.jpg',
-                // _editingContent?.image ?? 'assets/img/ile_de_kassa.jpg',
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-              ),
-      );
     }
-
-    return view;
   }
 
   Widget _buildFormFields() {
