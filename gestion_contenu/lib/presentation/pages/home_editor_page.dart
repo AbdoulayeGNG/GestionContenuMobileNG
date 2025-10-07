@@ -36,6 +36,7 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
   @override
   Widget build(BuildContext context) {
     // Gestiion du theme
+    final theme = ref.watch(themeProvider);
     final contentAsync = ref.watch(allContentProvider);
     final fakeAsync = AsyncData(contents_data);
 
@@ -53,7 +54,7 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
     return Scaffold(
       // backgroundColor: Colors.grey[50],
       appBar: _buildAppBar(),
-      drawer: _buildDrawer(),
+      drawer: _buildDrawer(theme),
       body: Column(
         children: [
           Padding(
@@ -73,7 +74,6 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
         'Mes Publications',
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.onPrimary,
         ),
       ),
       actions: [
@@ -81,18 +81,16 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
           padding: const EdgeInsets.only(right: 8.0),
           child: Icon(
             Icons.logout,
-            color: Colors.black,
             weight: 2,
           ),
         )
       ],
       elevation: 1,
       shadowColor: Colors.black12,
-      iconTheme: const IconThemeData(color: Colors.black87),
     );
   }
 
-  Drawer _buildDrawer() {
+  Drawer _buildDrawer(bool theme) {
     return Drawer(
       child: SizedBox(
         width: MediaQuery.of(context).size.width / 1.5,
@@ -101,7 +99,7 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
           child: Column(
             children: [
               SwitchListTile(
-                value: true,
+                value: theme,
                 onChanged: (value) {
                   ref.read(themeProvider.notifier).switchToTheme();
                 },
@@ -279,8 +277,8 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
       builder: (ctx) {
         return Container(
           height: MediaQuery.of(context).size.height * 0.85,
-          decoration: const BoxDecoration(
-            color: Colors.white,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(24),
               topRight: Radius.circular(24),
@@ -468,7 +466,6 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
           borderSide: BorderSide(color: Colors.blue[600]!, width: 2),
         ),
         filled: true,
-        fillColor: Colors.grey[50],
       ),
     );
   }

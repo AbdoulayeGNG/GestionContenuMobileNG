@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:gestioncontenu/core/constants.dart';
+import 'package:gestioncontenu/domains/entities/content.dart';
 
-class DetailScreen extends StatelessWidget {
-  final String title;
-  final String imageUrl;
-  final String description;
-  final String date;
+class ContentDetailPage extends StatelessWidget {
+  final Content content;
 
-  const DetailScreen({
-    Key? key,
-    required this.title,
-    required this.imageUrl,
-    required this.description,
-    required this.date,
-  }) : super(key: key);
+  const ContentDetailPage({super.key, required this.content});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(
+            Icons.arrow_back,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.black),
+            icon: const Icon(
+              Icons.more_vert,
+            ),
             onPressed: () {},
           ),
         ],
@@ -39,16 +34,16 @@ class DetailScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                date,
-                style: const TextStyle(
+                format.format(content.updatedAt!),
+                style: TextStyle(
                   fontSize: 14,
-                  color: Colors.green,
+                  color: Colors.blue[600],
                   fontWeight: FontWeight.w500,
                 ),
               ),
               // Titre
               Text(
-                title,
+                content.title,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -60,8 +55,8 @@ class DetailScreen extends StatelessWidget {
               // Image
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  imageUrl,
+                child: Image.asset(
+                  'assets/img/belair.jpg',
                   width: double.infinity,
                   height: 220,
                   fit: BoxFit.cover,
@@ -69,14 +64,37 @@ class DetailScreen extends StatelessWidget {
               ),
 
               const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.category, color: Colors.blue[600], size: 25),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(content.category),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.tag, color: Colors.blue[600], size: 25),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(content.tags!),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
 
               // Description
               Text(
-                description,
+                content.description!,
                 style: const TextStyle(
                   fontSize: 16,
                   height: 1.5,
-                  color: Colors.black87,
                 ),
               ),
             ],

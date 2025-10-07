@@ -52,7 +52,7 @@ class _SearchFieldState extends State<SearchField> {
           borderSide: const BorderSide(color: Colors.blue, width: 2),
         ),
         filled: true,
-        fillColor: Colors.grey[300],
+        // fillColor: Colors.grey[300],
         contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
       ),
       onChanged: (value) {},
