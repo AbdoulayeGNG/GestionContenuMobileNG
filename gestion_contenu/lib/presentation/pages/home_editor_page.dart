@@ -28,7 +28,7 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
   FlutterSecureStorage storage = const FlutterSecureStorage();
   @override
   Widget build(BuildContext context) {
-    print(storage.read);
+    
     final contentAsync = ref.watch(allContentProvider);
     final fakeAsync = AsyncData(contents_data);
 
