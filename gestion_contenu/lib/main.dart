@@ -24,9 +24,9 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    // final storage = TokenStorage();
-    // final api = ApiClient(storage);
-    // final authService = AuthService(api);
+    final storage = TokenStorage();
+    final api = ApiClient(storage);
+    final authService = AuthService(api);
     // final contentService = ContentService(api);
 
     return MaterialApp(
@@ -35,16 +35,16 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
-      home: HomeEditorPage(),
-      // initialRoute: '/',
-      // routes: {
+      home: LoginPage(),
+       initialRoute: '/',
+      routes: {
       //   '/': (context) => const AppStart(),
-      //   LoginPage.routeName: (context) => const LoginPage(),
-      //   SignupPage.routeName: (context) => const SignupPage(),
+      LoginPage.routeName: (context) => const LoginPage(),
+      SignupPage.routeName: (context) => const SignupPage(),
       //   HomeViewerPage.routeName: (context) => const HomeViewerPage(),
-      //   HomeEditorPage.routeName: (context) => const HomeEditorPage(),
+      HomeEditorPage.routeName: (context) => const HomeEditorPage(),
       //   ContentDetailPage.routeName: (context) => const ContentDetailPage(),
-      // },
+      },
     );
   }
 }

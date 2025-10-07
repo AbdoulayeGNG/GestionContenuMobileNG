@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gestioncontenu/data/mocked_data.dart';
 import 'package:gestioncontenu/models/content.dart';
@@ -24,8 +25,10 @@ class HomeEditorPage extends ConsumerStatefulWidget {
 
 class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
   final _formKey = GlobalKey<FormBuilderState>();
+  FlutterSecureStorage storage = const FlutterSecureStorage();
   @override
   Widget build(BuildContext context) {
+    
     final contentAsync = ref.watch(allContentProvider);
     final fakeAsync = AsyncData(contents_data);
 
@@ -35,19 +38,12 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
           return Center(child: Text('Aucun contenu trouve'));
         }
         final data = contents
-            .map((content) => ContentCard(
-                  content: content,
-                ))
+            .map((content) => ContentCard(content: content))
             .toList();
-        return SingleChildScrollView(
-          child: Column(
-            children: data,
-          ),
-        );
+        return SingleChildScrollView(child: Column(children: data));
       },
-      error: (error, stackTrace) => Center(
-        child: Text("Erreur lors de la recuperation des contenus}"),
-      ),
+      error: (error, stackTrace) =>
+          Center(child: Text("Erreur lors de la recuperation des contenus}")),
       loading: () => CircularProgressIndicator(),
     );
 
@@ -56,12 +52,9 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
         title: const Text('Publications'),
         actions: [
           IconButton(
-              icon: const Icon(
-                Icons.add,
-                color: Colors.black,
-                size: 25,
-              ),
-              onPressed: _showBottomSheet)
+            icon: const Icon(Icons.add, color: Colors.black, size: 25),
+            onPressed: _showBottomSheet,
+          ),
         ],
       ),
       body: contents,
@@ -72,87 +65,91 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
     String imagePath = "";
     XFile? image;
     showModalBottomSheet(
-        context: context,
-        builder: (ctx) {
-          return Container(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height / 1.5,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(20)),
-              child: FormBuilder(
-                  key: _formKey,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          IconButton(
-                              onPressed: () async {
-                                image = await takeImage();
-                                setState(() {
-                                  imagePath = image!.path;
-                                });
-                                print(imagePath);
-                              },
-                              icon: Icon(Icons.camera_alt)),
-                          FormBuilderTextField(
-                            name: 'title',
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(),
-                            ]),
-                            decoration: InputDecoration(
-                              labelText: 'Titre',
-                              hintText: 'Saisir le titre',
-                            ),
-                          ),
-                          FormBuilderTextField(
-                            name: 'description',
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(),
-                            ]),
-                            decoration: InputDecoration(
-                              labelText: 'Description',
-                              hintText: 'Saisir une description',
-                            ),
-                          ),
-                          FormBuilderTextField(
-                            name: 'tags',
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(),
-                            ]),
-                            decoration: InputDecoration(
-                              labelText: 'tags',
-                              hintText: 'Saisir le tag',
-                            ),
-                          ),
-                          FormBuilderTextField(
-                            name: 'category',
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(),
-                            ]),
-                            decoration: InputDecoration(
-                              labelText: 'Category',
-                              hintText: 'Saisir la category',
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                              width: double.infinity,
-                              child: TextButton(
-                                onPressed: submit,
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                ),
-                                child: Text("Enregistrer",
-                                    style: TextStyle(color: Colors.white)),
-                              ))
-                        ],
+      context: context,
+      builder: (ctx) {
+        return Container(
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height / 1.5,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+          child: FormBuilder(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        image = await takeImage();
+                        setState(() {
+                          imagePath = image!.path;
+                        });
+                        print(imagePath);
+                      },
+                      icon: Icon(Icons.camera_alt),
+                    ),
+                    FormBuilderTextField(
+                      name: 'title',
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                      decoration: InputDecoration(
+                        labelText: 'Titre',
+                        hintText: 'Saisir le titre',
                       ),
                     ),
-                  )));
-        });
+                    FormBuilderTextField(
+                      name: 'description',
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                      decoration: InputDecoration(
+                        labelText: 'Description',
+                        hintText: 'Saisir une description',
+                      ),
+                    ),
+                    FormBuilderTextField(
+                      name: 'tags',
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                      decoration: InputDecoration(
+                        labelText: 'tags',
+                        hintText: 'Saisir le tag',
+                      ),
+                    ),
+                    FormBuilderTextField(
+                      name: 'category',
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                      decoration: InputDecoration(
+                        labelText: 'Category',
+                        hintText: 'Saisir la category',
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        onPressed: submit,
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                        ),
+                        child: Text(
+                          "Enregistrer",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Future<XFile?> takeImage() async {
@@ -160,35 +157,36 @@ class _HomeEditorPageState extends ConsumerState<HomeEditorPage> {
     XFile? image;
 
     await showCupertinoModalPopup(
-        context: context,
-        builder: (BuildContext context) {
-          return CupertinoActionSheet(
-            title: Text(
-              "Choisir une source",
-              style: TextStyle(color: Colors.black, fontSize: 20),
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          title: Text(
+            "Choisir une source",
+            style: TextStyle(color: Colors.black, fontSize: 20),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                image = await picker.pickImage(source: ImageSource.camera);
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              },
+              child: Text('CAMERA'),
             ),
-            actions: [
-              TextButton(
-                onPressed: () async {
-                  image = await picker.pickImage(source: ImageSource.camera);
-                  if (context.mounted) {
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text('CAMERA'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  image = await picker.pickImage(source: ImageSource.gallery);
-                  if (context.mounted) {
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text('GALLERY'),
-              )
-            ],
-          );
-        });
+            TextButton(
+              onPressed: () async {
+                image = await picker.pickImage(source: ImageSource.gallery);
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              },
+              child: Text('GALLERY'),
+            ),
+          ],
+        );
+      },
+    );
 
     return image;
   }
