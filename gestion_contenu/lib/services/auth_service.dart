@@ -16,8 +16,19 @@ class AuthService {
     print(res);
     final data = res.data as Map<String, dynamic>;
     final token = data['token']?.toString() ?? '';
-    final user = AppUser.fromJson(data['user'] as Map<String, dynamic>);
-    return (token, user);
+    // final user = AppUser.fromJson(data['user'] as Map<String, dynamic>);
+
+    final userfind = AppUser(
+        id: '1',
+        email: email,
+        firstName: 'mamadou',
+        lastName: 'Diallo',
+        role: 'editor',
+    
+      );
+      print(userfind);
+      
+    return (token, userfind);
   }
 
   Future<void> signup({
