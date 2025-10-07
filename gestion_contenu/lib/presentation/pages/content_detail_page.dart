@@ -1,39 +1,105 @@
 import 'package:flutter/material.dart';
-import 'package:gestioncontenu/models/content.dart';
+import 'package:gestioncontenu/core/constants.dart';
+import 'package:gestioncontenu/domains/entities/content.dart';
 
 class ContentDetailPage extends StatelessWidget {
-  const ContentDetailPage({super.key});
-  static const routeName = '/detail';
+  final Content content;
+
+  const ContentDetailPage({super.key, required this.content});
 
   @override
   Widget build(BuildContext context) {
-    final ContentItem item = ModalRoute.of(context)!.settings.arguments as ContentItem;
     return Scaffold(
-      appBar: AppBar(title: Text(item.title)),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          if (item.image.isNotEmpty)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(item.image, fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const SizedBox(height: 160, child: Center(child: Icon(Icons.broken_image)))),
+      appBar: AppBar(
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.more_vert,
             ),
-          const SizedBox(height: 16),
-          Text(item.title, style: Theme.of(context).textTheme.headlineSmall),
-          const SizedBox(height: 8),
-          Row(children: [
-            Icon(Icons.person, color: Colors.grey.shade700),
-            const SizedBox(width: 6),
-            Expanded(child: Text('Auteur: ${item.authorId}', overflow: TextOverflow.ellipsis)),
-          ]),
-          const SizedBox(height: 8),
-          Text('Catégorie: ${item.category}'),
-          const SizedBox(height: 8),
-          Wrap(spacing: 6, children: item.tags.map((t) => Chip(label: Text(t))).toList()),
-          const SizedBox(height: 16),
-          Text(item.description),
-        ]),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                format.format(content.updatedAt!),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.blue[600],
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              // Titre
+              Text(
+                content.title,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Image
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  'assets/img/belair.jpg',
+                  width: double.infinity,
+                  height: 220,
+                  fit: BoxFit.cover,
+                ),
+              ),
+
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.category, color: Colors.blue[600], size: 25),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(content.category),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.tag, color: Colors.blue[600], size: 25),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(content.tags!),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              // Description
+              Text(
+                content.description!,
+                style: const TextStyle(
+                  fontSize: 16,
+                  height: 1.5,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
